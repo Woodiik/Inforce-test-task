@@ -6,6 +6,7 @@ import { ProductDetails } from 'components/ProductDetails/ProductDetails';
 import { AddProductModal } from 'components/AddProductModal/AddProductModal';
 import { addProductAction, removeProductAction } from 'redux/productSlice';
 import { DeleteConfirmationModal } from 'components/DeleteConfirmationModal/DeleteConfirmationModal';
+import { AddBtn, List } from './ProductList.styled';
 
 export const ProductList = () => {
   const products = useSelector(productsSelector);
@@ -81,11 +82,10 @@ export const ProductList = () => {
 
   return (
     <>
-      <h2>Products</h2>
-      <button onClick={() => setShowModal(true)} type="button">
+      <AddBtn onClick={() => setShowModal(true)} type="button">
         Add Product
-      </button>
-      <ul>
+      </AddBtn>
+      <List>
         {products.map(product => (
           <ProductItem
             key={product.id}
@@ -94,7 +94,7 @@ export const ProductList = () => {
             onDeleteBtnClick={toggleDeleteModal}
           />
         ))}
-      </ul>
+      </List>
       {selectedProduct && (
         <ProductDetails
           product={selectedProduct}

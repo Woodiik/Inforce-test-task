@@ -1,5 +1,14 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
+import {
+  ApproveBtn,
+  Backdrop,
+  BtnContainer,
+  CancelBtn,
+  Container,
+  Label,
+} from './EditProductModal.styled';
 
 export const EditProductModal = ({
   product,
@@ -10,12 +19,13 @@ export const EditProductModal = ({
   const portalRoot = document.querySelector('#modal-root');
   // eslint-disable-next-line no-unused-vars
   const [_, setEditedProduct] = useState(product);
+  const { name, count, size, weight } = product;
   const [formData, setFormData] = useState({
-    name: product.name,
-    count: product.count,
-    weight: product.weight,
-    width: product.width,
-    height: product.height,
+    name,
+    count,
+    weight,
+    width: size.width,
+    height: size.height,
   });
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -65,58 +75,75 @@ export const EditProductModal = ({
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleKeyDown = event => {
+    if (event.key === 'Escape') {
+      onRequestClose();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return ReactDOM.createPortal(
-    <div>
-      <label>
-        Name
-        <input
-          onChange={handleInputChange}
-          value={formData.name}
-          type="text"
-          name="name"
-        />
-      </label>
-      <label>
-        Count
-        <input
-          onChange={handleInputChange}
-          value={formData.count}
-          type="number"
-          name="count"
-        />
-      </label>
-      <label>
-        Weight
-        <input
-          onChange={handleInputChange}
-          value={formData.weight}
-          type="number"
-          name="weight"
-        />
-      </label>
-      <label>
-        Width
-        <input
-          onChange={handleInputChange}
-          value={formData.width}
-          type="number"
-          name="width"
-        />
-      </label>
-      <label>
-        Height
-        <input
-          onChange={handleInputChange}
-          value={formData.height}
-          type="number"
-          name="height"
-        />
-      </label>
-      <div>
-        <button onClick={onRequestClose}>Cancel</button>
-        <button onClick={handleSave}>Confirm</button>
-      </div>
-    </div>,
+    <Backdrop>
+      <Container>
+        <Label>
+          Name
+          <input
+            onChange={handleInputChange}
+            value={formData.name}
+            type="text"
+            name="name"
+          />
+        </Label>
+        <Label>
+          Count
+          <input
+            onChange={handleInputChange}
+            value={formData.count}
+            type="number"
+            name="count"
+          />
+        </Label>
+        <Label>
+          Weight
+          <input
+            onChange={handleInputChange}
+            value={formData.weight}
+            type="number"
+            name="weight"
+          />
+        </Label>
+        <Label>
+          Width
+          <input
+            onChange={handleInputChange}
+            value={formData.width}
+            type="number"
+            name="width"
+          />
+        </Label>
+        <Label>
+          Height
+          <input
+            onChange={handleInputChange}
+            value={formData.height}
+            type="number"
+            name="height"
+          />
+        </Label>
+        <BtnContainer>
+          <CancelBtn onClick={onRequestClose}>Cancel</CancelBtn>
+          <ApproveBtn onClick={handleSave}>Confirm</ApproveBtn>
+        </BtnContainer>
+      </Container>
+    </Backdrop>,
     portalRoot
   );
 };
